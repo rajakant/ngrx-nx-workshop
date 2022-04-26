@@ -1,30 +1,36 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { BasicProduct, Rating } from '@ngrx-nx-workshop/api-interfaces';
+import {
+  BasicProduct,
+  Product,
+  Rating,
+} from '@ngrx-nx-workshop/api-interfaces';
 import { ProductService } from '../product.service';
 import { RatingService } from '../rating.service';
 import { map, shareReplay } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { ProductState } from './reducer';
 
 @Component({
   selector: 'ngrx-nx-workshop-home',
   templateUrl: './product-list.component.html',
-  styleUrls: ['./product-list.component.scss']
+  styleUrls: ['./product-list.component.scss'],
 })
 export class ProductListComponent implements OnInit {
-  products$?: Observable<BasicProduct[]>;
+  products$?: Observable<BasicProduct[]> = this.store.select(
+    (state) => state.product.products
+  );
   customerRatings$?: Observable<Map<string, Rating>>;
 
   constructor(
-    private readonly productService: ProductService,
+    private readonly store: Store<{ product: ProductState }>,
     private readonly ratingService: RatingService
   ) {}
 
   ngOnInit() {
-    this.products$ = this.productService.getProducts();
-
     this.customerRatings$ = this.ratingService.getRatings().pipe(
-      map(arr => {
+      map((arr) => {
         const ratingsMap = new Map<string, Rating>();
         for (const productRating of arr) {
           ratingsMap.set(productRating.productId, productRating.rating);
@@ -33,7 +39,7 @@ export class ProductListComponent implements OnInit {
       }),
       shareReplay({
         refCount: true,
-        bufferSize: 1
+        bufferSize: 1,
       })
     );
   }
