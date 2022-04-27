@@ -1,6 +1,10 @@
 import { Product } from '@ngrx-nx-workshop/api-interfaces';
 import { createReducer, on } from '@ngrx/store';
 import * as apiAction from './action';
+
+export interface GlobalState {
+  product: ProductState;
+}
 export interface ProductState {
   products?: Product[];
 }

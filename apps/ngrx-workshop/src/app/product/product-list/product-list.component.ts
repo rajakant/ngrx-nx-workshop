@@ -12,6 +12,7 @@ import { map, shareReplay } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { ProductState } from '../reducer';
 import { productsOpened } from './actions';
+import * as selectors from '../selectors';
 
 @Component({
   selector: 'ngrx-nx-workshop-home',
@@ -19,8 +20,8 @@ import { productsOpened } from './actions';
   styleUrls: ['./product-list.component.scss'],
 })
 export class ProductListComponent implements OnInit {
-  products$?: Observable<BasicProduct[]> = this.store.select(
-    (state) => state.product.products as BasicProduct[]
+  products$?: Observable<BasicProduct[] | undefined> = this.store.select(
+    selectors.getProducts
   );
   customerRatings$?: Observable<Map<string, Rating>>;
 
