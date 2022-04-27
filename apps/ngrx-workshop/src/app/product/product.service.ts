@@ -9,8 +9,8 @@ import { HttpClient } from '@angular/common/http';
 export class ProductService {
   constructor(private readonly http: HttpClient) {}
 
-  getProducts(): Observable<BasicProduct[]> {
-    return this.http.get<BasicProduct[]>('/api/product/product-list');
+  getProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>('/api/product/product-list');
   }
 
   getProduct(id: string): Observable<Product> {

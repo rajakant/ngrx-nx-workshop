@@ -7,8 +7,10 @@ import { CartIconModule } from './cart/cart-icon/cart-icon.module';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
-import { reducer } from './product/product-list/reducer';
+import { produtsReducer } from './product/reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
+import { ProductsEffects } from './product/effects';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -17,8 +19,9 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     RoutingModule,
     CartIconModule,
     MatToolbarModule,
-    StoreModule.forRoot({ product: reducer }),
+    StoreModule.forRoot({ product: produtsReducer }),
     StoreDevtoolsModule.instrument({ maxAge: 50 }),
+    EffectsModule.forRoot([ProductsEffects]),
   ],
   bootstrap: [AppComponent],
 })
