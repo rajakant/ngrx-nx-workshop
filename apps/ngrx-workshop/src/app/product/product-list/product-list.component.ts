@@ -1,3 +1,4 @@
+import { GlobalState } from './../reducer';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -6,11 +7,9 @@ import {
   Product,
   Rating,
 } from '@ngrx-nx-workshop/api-interfaces';
-import { ProductService } from '../product.service';
 import { RatingService } from '../rating.service';
 import { map, shareReplay } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { ProductState } from '../reducer';
 import { productsOpened } from './actions';
 import * as selectors from '../selectors';
 
@@ -26,7 +25,7 @@ export class ProductListComponent implements OnInit {
   customerRatings$?: Observable<Map<string, Rating>>;
 
   constructor(
-    private readonly store: Store<{ product: ProductState }>,
+    private readonly store: Store<GlobalState>,
     private readonly ratingService: RatingService
   ) {}
 
