@@ -13,5 +13,9 @@ export const produtsReducer = createReducer(
   on(apiAction.productsFetchedSuccess, (state, { products }) => ({
     ...state,
     products: [...products],
+  })),
+  on(apiAction.productFetchedError, (state) => ({
+    ...state,
+    products: [],
   }))
 );
