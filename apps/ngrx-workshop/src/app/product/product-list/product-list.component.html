@@ -13,7 +13,7 @@
 
       <ngrx-nx-workshop-stars
         [rating]="product.rating"
-        [rated]="(customerRatings$ | async)?.get(product.id)"
+        [rated]="(customerRatings$ | async)?.get(product.id) ?? 0"
       ></ngrx-nx-workshop-stars>
     </mat-card>
   </a>

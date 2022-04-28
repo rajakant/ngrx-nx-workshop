@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { RoutingModule } from './router/routing.module';
-import { CartIconModule } from './cart/cart-icon/cart-icon.module';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
@@ -11,13 +10,15 @@ import { produtsReducer } from './product/reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { ProductsEffects } from './product/effects';
+import { CartIconModule } from './cart/cart-icon/cart-icon.module';
+import { CartModule } from './cart/cart.module';
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserAnimationsModule,
+    CartModule,
     HttpClientModule,
     RoutingModule,
-    CartIconModule,
     MatToolbarModule,
     StoreModule.forRoot({ product: produtsReducer }),
     StoreDevtoolsModule.instrument({ maxAge: 50 }),
