@@ -10,7 +10,6 @@ import { produtsReducer } from './product/reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { ProductsEffects } from './product/effects';
-import { CartIconModule } from './cart/cart-icon/cart-icon.module';
 import { CartModule } from './cart/cart.module';
 @NgModule({
   declarations: [AppComponent],
