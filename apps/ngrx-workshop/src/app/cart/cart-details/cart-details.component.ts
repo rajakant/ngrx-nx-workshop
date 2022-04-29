@@ -17,10 +17,10 @@ import * as actions from './actions';
   styleUrls: ['./cart-details.component.scss'],
 })
 export class CartDetailsComponent {
-  cartProducts$: Observable<CartProduct[] | undefined> = combineLatest(
+  cartProducts$: Observable<CartProduct[] | undefined> = combineLatest([
     this.store.select(cartSelectors.getCartItems),
-    this.store.select(productSelectors.getProducts)
-  ).pipe(
+    this.store.select(productSelectors.getProducts),
+  ]).pipe(
     map(([cartItems, products]) => {
       if (!cartItems || !products) return undefined;
       return Object.entries(cartItems)

@@ -34,5 +34,16 @@ export const cartReducer = createReducer(
       },
       {}
     ),
-  }))
+  })),
+  on(actions.addToCartError, (state, { productId }) => {
+    const currentQuantity =
+      (state.cartItems && state.cartItems[productId]) ?? 0;
+    const newCartItems = { ...state.cartItems };
+    if (currentQuantity) {
+      newCartItems[productId] = currentQuantity - 1;
+    } else {
+      delete newCartItems[productId];
+    }
+    return { ...state, cartItems: newCartItems };
+  })
 );

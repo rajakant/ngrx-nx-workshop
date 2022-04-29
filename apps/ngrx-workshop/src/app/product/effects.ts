@@ -5,6 +5,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as productLisrActions from './product-list/actions';
 import * as apiActions from './action';
 import { exhaustMap, map, of } from 'rxjs';
+import * as cartDetailsAction from '../cart/cart-details/actions';
 
 @Injectable()
 export class ProductsEffects {
@@ -15,7 +16,10 @@ export class ProductsEffects {
 
   fetchProducts$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(productLisrActions.productsOpened),
+      ofType(
+        productLisrActions.productsOpened,
+        cartDetailsAction.cartDetailsOpened
+      ),
       exhaustMap(() =>
         this.ProductService.getProducts().pipe(
           map((products) => apiActions.productsFetchedSuccess({ products })),
