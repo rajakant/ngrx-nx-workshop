@@ -22,24 +22,13 @@ export class ProductsEffects {
       exhaustMap(() =>
         this.ProductService.getProducts().pipe(
           map((products) => apiActions.productsFetchedSuccess({ products })),
-          catchError(() => of(apiActions.productFetchedError()))
+          catchError(() =>
+            of(
+              apiActions.productFetchedError({ errorMessage: 'Error Happened' })
+            )
+          )
         )
       )
     );
   });
-
-  handleFetchError$ = createEffect(
-    () => {
-      return this.actions$.pipe(
-        ofType(apiActions.productFetchedError),
-        tap(() => {
-          this.snackBar.open('Error Fetching Product', 'Error', {
-            duration: 2500,
-          });
-          this.appRef.tick();
-        })
-      );
-    },
-    { dispatch: false }
-  );
 }

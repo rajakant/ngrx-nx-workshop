@@ -2,11 +2,7 @@ import { GlobalState } from './../reducer';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import {
-  BasicProduct,
-  Product,
-  Rating,
-} from '@ngrx-nx-workshop/api-interfaces';
+import { BasicProduct, Rating } from '@ngrx-nx-workshop/api-interfaces';
 import { RatingService } from '../rating.service';
 import { map, shareReplay } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
