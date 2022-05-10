@@ -17,7 +17,7 @@ export class ErrorEffects {
     () => {
       return this.actions$.pipe(
         ofType(
-          productApiActions.productFetchedError,
+          productApiActions.productsFetchedError,
           cartApiActions.fetchCartItemError,
           cartApiActions.addToCartError
         ),

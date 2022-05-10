@@ -1,4 +1,3 @@
-import { GlobalState } from './../reducer';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -21,7 +20,7 @@ export class ProductListComponent implements OnInit {
   customerRatings$?: Observable<Map<string, Rating>>;
 
   constructor(
-    private readonly store: Store<GlobalState>,
+    private readonly store: Store,
     private readonly ratingService: RatingService
   ) {}
 

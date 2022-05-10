@@ -1,10 +1,7 @@
 import { Product } from '@ngrx-nx-workshop/api-interfaces';
 import { createReducer, on } from '@ngrx/store';
 import * as apiAction from './action';
-
-export interface GlobalState {
-  product: ProductState;
-}
+import * as productDetailsAction from './product-details/action';
 export interface ProductState {
   products?: Product[];
 }
@@ -18,8 +15,14 @@ export const produtsReducer = createReducer(
     ...state,
     products: [...products],
   })),
-  on(apiAction.productFetchedError, (state) => ({
+  on(apiAction.productsFetchedError, (state) => ({
     ...state,
     products: [],
-  }))
+  })),
+  on(productDetailsAction.productFetchedSuccess, (state, { product }) => {
+    const productClone = state.products ? [...state.products] : [];
+    const indexOfProduct = productClone.findIndex((p) => p.id === product.id);
+    productClone.splice(indexOfProduct, 1, product);
+    return { ...state, products: productClone };
+  })
 );

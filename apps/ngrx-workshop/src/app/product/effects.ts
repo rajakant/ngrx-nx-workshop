@@ -4,18 +4,18 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as productLisrActions from './product-list/actions';
 import * as apiActions from './action';
-import { exhaustMap, map, of } from 'rxjs';
+import { exhaustMap, map, of, switchMap } from 'rxjs';
 import * as cartDetailsAction from '../cart/cart-details/actions';
 import { Store } from '@ngrx/store';
-import { GlobalState } from './reducer';
 import * as selectors from './selectors';
+import * as productDetailsActions from './product-details/action';
 
 @Injectable()
 export class ProductsEffects {
   constructor(
     private readonly actions$: Actions,
     private readonly productService: ProductService,
-    private readonly store: Store<GlobalState>
+    private readonly store: Store
   ) {}
 
   fetchProducts$ = createEffect(() => {
@@ -33,7 +33,30 @@ export class ProductsEffects {
           map((products) => apiActions.productsFetchedSuccess({ products })),
           catchError(() =>
             of(
-              apiActions.productFetchedError({ errorMessage: 'Error Happened' })
+              apiActions.productsFetchedError({
+                errorMessage: 'Error Happened',
+              })
+            )
+          )
+        )
+      )
+    );
+  });
+
+  fetchCurrentProduct$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(productDetailsActions.productDetailsOpened),
+      withLatestFrom(this.store.select(selectors.getCurrentProductId)),
+      switchMap(([, id]) =>
+        this.productService.getProduct(id ?? '').pipe(
+          map((product) =>
+            productDetailsActions.productFetchedSuccess({ product })
+          ),
+          catchError(() =>
+            of(
+              productDetailsActions.productFetchedError({
+                errorMessage: 'Product fetched apis failed',
+              })
             )
           )
         )

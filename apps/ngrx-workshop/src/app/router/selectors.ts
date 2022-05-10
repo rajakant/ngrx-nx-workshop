@@ -12,5 +12,4 @@ export const routerFeatureState =
     ROUTER_FEATURE_KEY
   );
 
-export const getRouterParam =
-  getSelectors(routerFeatureState).selectCurrentRoute;
+export const getRouterParam = getSelectors(routerFeatureState).selectRouteParam;
