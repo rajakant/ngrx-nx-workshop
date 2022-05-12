@@ -1,51 +1,32 @@
-import * as productSelectors from './../../product/selectors';
-import * as cartSelectors from './../selectors';
 import { Component } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 import { CartProduct } from '../../model/product';
 import { CartService } from '../cart.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Store, createSelector } from '@ngrx/store';
 import * as actions from './actions';
+import * as selectors from '../selectors';
 
+const cartDetailsVm = createSelector(
+  selectors.getCartProducts,
+  selectors.getCartTotal,
+  (products, total) => ({ products, total })
+);
 @Component({
   selector: 'ngrx-nx-workshop-cart-details',
   templateUrl: './cart-details.component.html',
   styleUrls: ['./cart-details.component.scss'],
 })
 export class CartDetailsComponent {
-  cartProducts$: Observable<CartProduct[] | undefined> = combineLatest([
-    this.store.select(cartSelectors.getCartItems),
-    this.store.select(productSelectors.getProducts),
-  ]).pipe(
-    map(([cartItems, products]) => {
-      if (!cartItems || !products) return undefined;
-      return Object.entries(cartItems)
-        .map(([productId, quantity]): CartProduct | undefined => {
-          const product = products.find((p) => p.id === productId);
-          if (!product) return undefined;
-          return {
-            ...product,
-            quantity,
-          };
-        })
-        .filter((cartProduct): cartProduct is CartProduct => !!cartProduct);
-    })
+  cartProducts$: Observable<CartProduct[] | undefined> = this.store.select(
+    selectors.getCartProducts
   );
 
-  total$ = this.cartProducts$.pipe(
-    map(
-      (cartProducts) =>
-        cartProducts &&
-        cartProducts.reduce(
-          (acc, product) => acc + product.price * product.quantity,
-          0
-        )
-    )
-  );
+  total$ = this.store.select(selectors.getCartTotal);
+
+  cartDetailsVm$ = this.store.select(cartDetailsVm);
 
   constructor(
     private readonly cartService: CartService,
