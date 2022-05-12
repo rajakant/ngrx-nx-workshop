@@ -1,12 +1,9 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Rating } from '@ngrx-nx-workshop/api-interfaces';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
-
-import { ProductService } from '../product.service';
+import { filter, map, switchMap } from 'rxjs/operators';
 import { RatingService } from '../rating.service';
 import * as productDetailsActions from './action';
 import * as selectors from '../selectors';
@@ -17,21 +14,13 @@ import * as selectors from '../selectors';
   styleUrls: ['./product-details.component.scss'],
 })
 export class ProductDetailsComponent implements OnDestroy {
-  private readonly productId$ = this.router.paramMap.pipe(
-    map((params: ParamMap) => params.get('productId')),
-    filter((id: string | null): id is string => !!id),
-    shareReplay({ bufferSize: 1, refCount: true })
-  );
-
   private readonly subscription = new Subscription();
 
-  product$ = this.store.select(selectors.getCurrentProduct);
+  readonly product$ = this.store.select(selectors.getCurrentProduct);
 
   private customerRating$ = new BehaviorSubject<number | undefined>(undefined);
 
   constructor(
-    private readonly router: ActivatedRoute,
-    private readonly productService: ProductService,
     private readonly ratingService: RatingService,
     private readonly location: Location,
     private readonly store: Store
