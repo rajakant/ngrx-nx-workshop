@@ -1,22 +1,31 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { ProductState } from './reducer';
+import { ProductState, productAdapter } from './reducer';
 import * as routerSelectors from '../router/selectors';
 
 export const productFeature = createFeatureSelector<ProductState>('product');
 
-export const getProducts = createSelector(
+const { selectAll, selectEntities } = productAdapter.getSelectors();
+
+export const getProductsEntityState = createSelector(
   productFeature,
   (state) => state.products
 );
 
+export const getProducts = createSelector(getProductsEntityState, selectAll);
+
 export const getCurrentProductId = routerSelectors.getRouterParam('productId');
 
+export const getProductDictionary = createSelector(
+  getProductsEntityState,
+  selectEntities
+);
+
 export const getCurrentProduct = createSelector(
-  getProducts,
+  getProductDictionary,
   getCurrentProductId,
   (products, id) => {
-    if (id == null || !products) return undefined;
-    return products?.find((p) => p.id === id);
+    if (id == null) return undefined;
+    return products[id];
   }
 );
 
